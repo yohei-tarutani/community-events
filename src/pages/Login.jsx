@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { EventContext } from "../contexts/EventContext";
 
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const { setUsernameObj } = useContext(EventContext);
 
   const handleLogin = () => {
     // フォームのバリデーション
@@ -18,24 +20,22 @@ const Login = () => {
       return;
     }
 
-    localStorage.setItem("username", JSON.stringify({ username }));
+    const user = { username, password };
+    localStorage.setItem("username", JSON.stringify(user));
+    setUsernameObj(user);
+
     alert("ログインしました！");
-    // ログイン後ホーム画面へ
     navigate("/");
   };
 
   return (
-    <div>
+    <div className="login-container">
       <h2>ログイン</h2>
 
-      {error && (
-        <p style={{ color: "red", fontWeight: "bold", marginBottom: 10 }}>
-          {error}
-        </p>
-      )}
+      {error && <p className="error-message">{error}</p>}
 
-      <div style={{ display: "flex", gap: 10, marginBottom: 20 }}>
-        <label htmlFor="">ユーザー名</label>
+      <div className="form-group">
+        <label>ユーザー名</label>
         <input
           type="text"
           placeholder="例：ファンリピート"
@@ -46,8 +46,9 @@ const Login = () => {
           }}
         />
       </div>
-      <div style={{ display: "flex", gap: 10, marginBottom: 20 }}>
-        <label htmlFor="">パスワード</label>
+
+      <div className="form-group">
+        <label>パスワード</label>
         <input
           type="password"
           placeholder="例：1111"
@@ -58,7 +59,10 @@ const Login = () => {
           }}
         />
       </div>
-      <button onClick={handleLogin}>ログイン</button>
+
+      <button className="submit-button" onClick={handleLogin}>
+        ログイン
+      </button>
     </div>
   );
 };

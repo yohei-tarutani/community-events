@@ -1,21 +1,21 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const EventCard = ({ event }) => {
+const EventCard = ({ event, onDelete }) => {
   return (
-    <div
-      style={{
-        border: "1px solid gray",
-        borderRadius: "16px",
-        padding: 14,
-        marginBottom: 10,
-      }}
-    >
-      <h3 style={{ marginTop: 0 }}>{event.title}</h3>
+    <div className="event-card">
+      <h3 className="event-title">{event.title}</h3>
       <p>
-        📅{event.date} / 📍{event.location}
+        📅 {event.date} / 📍 {event.location}
       </p>
-      <Link to={`/events/${event.id}/`}>詳細を見る</Link>
+      <Link to={`/events/${event.id}/`} className="details-link">
+        詳細を見る
+      </Link>
+      {onDelete && (
+        <button onClick={() => onDelete(event.id)} className="delete-btn">
+          削除
+        </button>
+      )}
     </div>
   );
 };

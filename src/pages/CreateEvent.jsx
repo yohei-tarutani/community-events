@@ -4,14 +4,8 @@ import { EventContext } from "../contexts/EventContext";
 import { v4 as uuidv4 } from "uuid";
 
 const CreateEvent = () => {
-  const { setEvents } = useContext(EventContext);
+  const { setEvents, username_obj, form, setForm } = useContext(EventContext);
   const navigate = useNavigate();
-  const [form, setForm] = useState({
-    title: "",
-    date: "",
-    location: "",
-    description: "",
-  });
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -20,48 +14,72 @@ const CreateEvent = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const newEvent = { id: uuidv4(), ...form };
-    setEvents((prev) => [...prev, newEvent]);
+    if (username_obj) {
+      const newEvent = { id: uuidv4(), ...form };
+      setEvents((prev) => [...prev, newEvent]);
 
-    alert("イベントが登録されました。");
-    navigate("/");
+      alert("イベントが登録されました。");
+      navigate("/");
+    } else {
+      alert("参加申し込みにはログインが必要です。");
+      navigate("/login");
+    }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h2>イベント登録</h2>
-
-      <div style={{ display: "grid", columnGap: 10, rowGap: 20 }}>
-        <div style={{ display: "flex", gap: 10 }}>
-          <label htmlFor="">名称</label>
-          <input
-            name="title"
-            placeholder="例：夏祭り"
-            onChange={handleChange}
-            required
-          />
+    <div className="create-event-container">
+      <form onSubmit={handleSubmit} className="form-container">
+        <h2>イベント登録</h2>
+        <div className="form-grid">
+          <label>
+            名称
+            <input
+              name="title"
+              placeholder="例：夏祭り"
+              onChange={handleChange}
+              required
+            />
+          </label>
+          <label>
+            日時
+            <input
+              name="date"
+              type="date"
+              min={new Date().toLocaleDateString("sv-SE")}
+              // 過去の日付を選択不可とする（日本よりも時間が遅く.YYYY-MM-DD形式で出力されHTMLのdateと相性の良いスウェーデンのロケールを使用
+              onChange={handleChange}
+              required
+            />
+          </label>
+          <label>
+            場所
+            <input
+              name="location"
+              placeholder="例：中央広場"
+              onChange={handleChange}
+              required
+            />
+          </label>
+          <label>
+            説明
+            <textarea
+              name="description"
+              placeholder="例：地域の夏の風物詩、屋台や盆踊りを楽しめます。"
+              onChange={handleChange}
+              required
+            />
+          </label>
+          <button type="submit" className="submit-button">
+            投稿する
+          </button>
         </div>
-        <div style={{ display: "flex", gap: 10 }}>
-          <label htmlFor="">日時</label>
-          <input name="date" type="date" onChange={handleChange} required />
-        </div>
-        <div style={{ display: "flex", gap: 10 }}>
-          <label htmlFor="">場所</label>
-          <input placeholder="例：中央広場" onChange={handleChange} required />
-        </div>
-        <div style={{ display: "flex", gap: 10 }}>
-          <label htmlFor="">説明</label>
-          <textarea
-            placeholder="例：地域の夏の風物詩、屋台や盆踊りを楽しめます。"
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div style={{ display: "flex", marginTop: 10 }}>
-          <button type="submit">投稿する</button>
-        </div>
+      </form>
+      <div className="button-container">
+        <button className="button-text" onClick={() => navigate(-1)}>
+          ← 戻る
+        </button>
       </div>
-    </form>
+    </div>
   );
 };
 

@@ -42,9 +42,30 @@ export const EventContext = createContext();
 
 export const EventProvider = ({ children }) => {
   const [events, setEvents] = useState(dummyEvents);
+  const [form, setForm] = useState({
+    title: "",
+    date: "",
+    location: "",
+    description: "",
+  });
+  const [username_obj, setUsernameObj] = useState(
+    JSON.parse(localStorage.getItem("username")) || null
+  );
+  const [mypageEvents, setMypageEvents] = useState([]);
 
   return (
-    <EventContext.Provider value={{ events, setEvents }}>
+    <EventContext.Provider
+      value={{
+        events,
+        setEvents,
+        form,
+        setForm,
+        username_obj,
+        setUsernameObj,
+        mypageEvents,
+        setMypageEvents,
+      }}
+    >
       {children}
     </EventContext.Provider>
   );
