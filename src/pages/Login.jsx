@@ -38,7 +38,7 @@ const Login = () => {
         <label>ユーザー名</label>
         <input
           type="text"
-          placeholder="例：ファンリピート"
+          placeholder="例：ユーザー名"
           value={username}
           onChange={(e) => {
             setUsername(e.target.value);
